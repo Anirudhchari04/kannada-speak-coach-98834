@@ -63,7 +63,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ac240f94-8140-4792-9ada-ade375413126) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/09d047e7-5c87-44ce-809f-f894dc7c37ca) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
