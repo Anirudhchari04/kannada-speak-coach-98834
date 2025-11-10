@@ -33,6 +33,7 @@ Ask follow-up questions to keep the conversation flowing.`;
 
     console.log('Sending request to Lovable AI with', messages.length, 'messages');
 
+    // Get conversational response
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -66,10 +67,45 @@ Ask follow-up questions to keep the conversation flowing.`;
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
 
+    // Analyze grammar if user just spoke
+    let grammarFeedback = null;
+    const lastMessage = conversation[conversation.length - 1];
+    if (lastMessage && lastMessage.role === 'user') {
+      console.log('Analyzing grammar for user message');
+      const grammarResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            {
+              role: "system",
+              content: "Analyze this English sentence for grammar errors. Provide brief, constructive feedback. If perfect, say 'Good grammar!' If errors exist, point them out kindly with corrections. Keep it under 30 words."
+            },
+            {
+              role: "user",
+              content: lastMessage.content
+            }
+          ],
+        }),
+      });
+
+      if (grammarResponse.ok) {
+        const grammarData = await grammarResponse.json();
+        grammarFeedback = grammarData.choices[0].message.content;
+      }
+    }
+
     console.log('AI response generated successfully');
 
     return new Response(
-      JSON.stringify({ response: aiResponse }),
+      JSON.stringify({ 
+        response: aiResponse,
+        grammarFeedback 
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

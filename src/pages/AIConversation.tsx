@@ -18,6 +18,7 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   score?: number;
+  grammarFeedback?: string;
 }
 
 const AIConversation = () => {
@@ -53,7 +54,8 @@ const AIConversation = () => {
 
       const aiMessage: Message = {
         role: "assistant",
-        content: data.response
+        content: data.response,
+        grammarFeedback: data.grammarFeedback
       };
 
       setConversation([aiMessage]);
@@ -128,7 +130,8 @@ const AIConversation = () => {
 
       const aiMessage: Message = {
         role: "assistant",
-        content: data.response
+        content: data.response,
+        grammarFeedback: data.grammarFeedback
       };
 
       setConversation([...updatedConversation, aiMessage]);
@@ -158,14 +161,37 @@ const AIConversation = () => {
       ? scores.reduce((a, b) => a + b, 0) / scores.length 
       : 0;
 
-    let feedback = `Your average pronunciation score: **${avgScore.toFixed(2)}%**\n\n`;
+    // Collect grammar feedback
+    const grammarFeedbacks = conversation
+      .filter(m => m.role === 'assistant' && m.grammarFeedback)
+      .map(m => m.grammarFeedback!);
+
+    let feedback = "## 📊 Your Performance Summary\n\n";
+    
+    // Pronunciation feedback
+    feedback += `### 🗣️ Pronunciation\n`;
+    feedback += `Average clarity score: **${avgScore.toFixed(1)}%**\n\n`;
     if (avgScore >= 90) {
-      feedback += "🌟 Excellent clarity and fluency! Keep going!";
+      feedback += "🌟 Excellent clarity and fluency! Your pronunciation is very clear.\n\n";
     } else if (avgScore >= 75) {
-      feedback += "👍 Good job! Work on a few pronunciations to sound even more natural.";
+      feedback += "👍 Good job! Your pronunciation is generally clear. Keep practicing for even better fluency.\n\n";
     } else {
-      feedback += "💪 Keep practicing slowly and clearly to improve pronunciation.";
+      feedback += "💪 Keep practicing! Focus on speaking slowly and clearly to improve pronunciation.\n\n";
     }
+
+    // Grammar feedback
+    feedback += `### ✍️ Grammar\n`;
+    if (grammarFeedbacks.length > 0) {
+      grammarFeedbacks.forEach((gf, idx) => {
+        feedback += `**Turn ${idx + 1}:** ${gf}\n\n`;
+      });
+    } else {
+      feedback += "No grammar analysis available.\n\n";
+    }
+
+    feedback += "---\n\n";
+    feedback += "🎉 Great practice session! Keep up the good work!";
+
     return feedback;
   };
 
@@ -246,7 +272,7 @@ const AIConversation = () => {
                 <h4 className="font-semibold">Your Conversation:</h4>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {conversation.map((msg, idx) => (
-                    <div 
+                    <div
                       key={idx}
                       className={`text-left p-3 rounded-lg ${
                         msg.role === 'assistant' 
@@ -256,7 +282,6 @@ const AIConversation = () => {
                     >
                       <div className="font-semibold text-sm mb-1">
                         {msg.role === 'assistant' ? '🤖 AI' : '👤 You'}
-                        {msg.score && ` (${msg.score.toFixed(1)}%)`}
                       </div>
                       <div className="text-sm">{msg.content}</div>
                     </div>
@@ -312,11 +337,6 @@ const AIConversation = () => {
                       <span className="font-semibold text-sm">
                         {msg.role === 'assistant' ? '🤖 AI' : '👤 You'}
                       </span>
-                      {msg.score && (
-                        <span className="text-xs bg-success/20 text-success px-2 py-1 rounded">
-                          {msg.score.toFixed(1)}% accuracy
-                        </span>
-                      )}
                     </div>
                     <p className="text-sm">{msg.content}</p>
                   </div>
