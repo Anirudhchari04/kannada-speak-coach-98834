@@ -1,4 +1,57 @@
-# Welcome to your Lovable project
+# Kannada Speak Coach 🎙️  
+An AI-powered spoken English practice tool designed for Kannada speakers.  
+Users speak, get real-time feedback on clarity, grammar, and fluency, and continue natural conversation with an AI coach.
+
+---
+
+## 🌟 Features
+- 🎤 **Voice-based Conversation** – No typing required
+- 🤖 **AI Conversation Partner** – Context-aware, natural replies
+- 🔊 **Text-to-Speech Playback** – AI speaks responses aloud
+- 🗣️ **Speech Recognition** – Converts user speech to text
+- 📝 **Fluency & Pronunciation Feedback** – Word-level scoring + short grammar tips
+- 🎯 **Beginner-Friendly UI** – Simple topic selection and one-button speaking
+
+---
+
+## 🧠 Tech Stack
+
+### **Core Language & Framework**
+| Area | Technology |
+|------|------------|
+| Programming Language | **Python** |
+| Web UI Framework | **Streamlit** |
+
+### **AI & NLP**
+| Feature | Tech Used |
+|--------|-----------|
+| Conversation Generation | **Google Gemini API (GenerativeModel: gemini-2.5-flash)** |
+| Grammar Feedback | **Prompt-engineered Gemini responses** |
+| Pronunciation Scoring | **`difflib.SequenceMatcher` word-level similarity** |
+
+### **Speech & Audio**
+| Purpose | Library |
+|--------|---------|
+| Speech Recognition (User to Text) | **SpeechRecognition** + **Google Speech API** |
+| Text-to-Speech (AI to Audio) | **gTTS (Google Text-to-Speech)** |
+| Audio Embedding in UI | **Base64 / Streamlit autoplay HTML injection** |
+
+### **Utility / Other**
+| Use | Libraries |
+|----|-----------|
+| Data Processing | `re`, `os`, `time`, `base64` |
+| Session & Conversation Management | `streamlit.session_state` |
+
+---
+
+## 🏗️ Installation & Setup
+
+```bash
+git clone https://github.com/Anirudhchari04/kannada-speak-coach-98834.git
+cd kannada-speak-coach-98834
+pip install -r requirements.txt
+```
+
 
 ## Project info
 
