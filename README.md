@@ -55,7 +55,7 @@ pip install -r requirements.txt
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/ac240f94-8140-4792-9ada-ade375413126
+**URL**: https://lovable.dev/projects/09d047e7-5c87-44ce-809f-f894dc7c37ca
 
 ## How can I edit this code?
 
